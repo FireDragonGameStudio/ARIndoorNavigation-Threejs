@@ -35,12 +35,9 @@ function init() {
     renderer.setAnimationLoop(render);
     document.body.appendChild(renderer.domElement);
 
-    const ambient = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 0.3);
+    const ambient = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+    ambient.position.set(0.5, 1, 0.25);
     scene.add(ambient);
-
-    const light = new THREE.DirectionalLight();
-    light.position.set(0.3, 1, 1);
-    scene.add(light);
 
     controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0, 0);
@@ -88,16 +85,16 @@ function setupGeometry() {
 
     // create room map
     navigationArea = new THREE.Group();
-    navigationArea.add(createWallElement(new THREE.Vector3(-4.85, -0.55, -0.74), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.0625, 2, 1.578)));
-    navigationArea.add(createWallElement(new THREE.Vector3(-2.98, -0.55, -2.65), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.0625, 2, 3.51)));
-    navigationArea.add(createWallElement(new THREE.Vector3(1, -0.55, -2.55), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.0625, 2, 3.467)));
-    navigationArea.add(createWallElement(new THREE.Vector3(1, -0.55, 2.18), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.0625, 2, 4.475)));
-    navigationArea.add(createWallElement(new THREE.Vector3(-0.689, -0.55, 0), new THREE.Vector3(0, 0, 0), new THREE.Vector3(8.518, 2, 0.06)));
-    navigationArea.add(createWallElement(new THREE.Vector3(0.97, -0.55, -4.05), new THREE.Vector3(0, 0, 0), new THREE.Vector3(7.91, 2, 0.06)));
-    navigationArea.add(createWallElement(new THREE.Vector3(-3.34, -0.55, -1.29), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.86, 2, 0.06)));
-    navigationArea.add(createWallElement(new THREE.Vector3(4.86, -0.55, -0.01), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.06, 2, 9.114)));
-    navigationArea.add(createWallElement(new THREE.Vector3(-1.6, -0.55, -0.88), new THREE.Vector3(0, 0, 0), new THREE.Vector3(2.85, 2, 0.06)));
-    navigationArea.add(createWallElement(new THREE.Vector3(2.9, -0.55, 4.06), new THREE.Vector3(0, 0, 0), new THREE.Vector3(4, 2, 0.06)));
+    navigationArea.add(createWallElement(new THREE.Vector3(-4.85, -1, -0.74), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.0625, 3, 1.578)));
+    navigationArea.add(createWallElement(new THREE.Vector3(-2.98, -1, -2.65), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.0625, 3, 3.51)));
+    navigationArea.add(createWallElement(new THREE.Vector3(1, -1, -2.55), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.0625, 3, 3.467)));
+    navigationArea.add(createWallElement(new THREE.Vector3(1, -1, 2.18), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.0625, 3, 4.475)));
+    navigationArea.add(createWallElement(new THREE.Vector3(-0.689, -1, 0), new THREE.Vector3(0, 0, 0), new THREE.Vector3(8.518, 3, 0.06)));
+    navigationArea.add(createWallElement(new THREE.Vector3(0.97, -1, -4.05), new THREE.Vector3(0, 0, 0), new THREE.Vector3(7.91, 3, 0.06)));
+    navigationArea.add(createWallElement(new THREE.Vector3(-3.34, -1, -1.29), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.86, 3, 0.06)));
+    navigationArea.add(createWallElement(new THREE.Vector3(4.86, -1, -0.01), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.06, 3, 9.114)));
+    navigationArea.add(createWallElement(new THREE.Vector3(-1.6, -1, -0.88), new THREE.Vector3(0, 0, 0), new THREE.Vector3(2.85, 3, 0.06)));
+    navigationArea.add(createWallElement(new THREE.Vector3(2.9, -1, 4.06), new THREE.Vector3(0, 0, 0), new THREE.Vector3(4, 3, 0.06)));
 
     // set starting point to start-room center
     navigationArea.position.set(-2.8, -0.1, 2);
@@ -106,20 +103,21 @@ function setupGeometry() {
     const floorGeometry = new THREE.PlaneGeometry(10.2, 8.5);
     const floorTexture = new THREE.TextureLoader().load(CasualFlapMapImageUrl);
     const floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture });
-    const floorPlane = new THREE.Mesh(floorGeometry, floorMaterial);
-    floorPlane.rotateX(THREE.MathUtils.degToRad(270));
-    floorPlane.position.set(0, -1.5, 0);
-    navigationArea.add(floorPlane);
+    const floorPlaneMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+    floorPlaneMesh.rotateX(THREE.MathUtils.degToRad(270));
+    floorPlaneMesh.position.set(0, -2, 0);
+    floorPlaneMesh.renderOrder = 3;
+    navigationArea.add(floorPlaneMesh);
 
     scene.add(navigationArea);
 }
 
 function createWallElement(position, rotation, scale) {
     const occluderGeometry = new THREE.BoxGeometry(scale.x, scale.y, scale.z);
-    const mesh = new THREE.Mesh(occluderGeometry, occluderMaterial);
-    mesh.position.set(position.x, position.y, position.z);
-    mesh.material.colorWrite = false;
-    mesh.renderOrder = 2;
+    const occluderMesh = new THREE.Mesh(occluderGeometry, occluderMaterial);
+    occluderMesh.position.set(position.x, position.y, position.z);
+    occluderMesh.material.colorWrite = false;
+    occluderMesh.renderOrder = 2;
 
-    return mesh;
+    return occluderMesh;
 }

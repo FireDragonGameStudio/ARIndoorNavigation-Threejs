@@ -1,3 +1,5 @@
 import { defineConfig } from "vite";
 
-export default {};
+export default {
+    base: "/ARIndoorNavigation-Threejs/",
+};

@@ -118,7 +118,7 @@ function createWallElement(position, rotation, scale) {
     const occluderGeometry = new THREE.BoxGeometry(scale.x, scale.y, scale.z);
     const mesh = new THREE.Mesh(occluderGeometry, occluderMaterial);
     mesh.position.set(position.x, position.y, position.z);
-    // mesh.material.colorWrite = false;
+    mesh.material.colorWrite = false;
     mesh.renderOrder = 2;
 
     return mesh;

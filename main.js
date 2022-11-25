@@ -11,6 +11,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 // import { VRButton } from "three/addons/webxr/VRButton.js";
 import { ARButton } from "three/addons/webxr/ARButton.js";
+import CasualFlapMapImageUrl from "./CasualFlatMap.png";
 
 let camera, scene, renderer, controls;
 let controller;
@@ -103,7 +104,7 @@ function setupGeometry() {
 
     // create floor
     const floorGeometry = new THREE.PlaneGeometry(10.2, 8.5);
-    const floorTexture = new THREE.TextureLoader().load("CasualFlatMap.png");
+    const floorTexture = new THREE.TextureLoader().load(CasualFlapMapImageUrl);
     const floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture });
     const floorPlane = new THREE.Mesh(floorGeometry, floorMaterial);
     floorPlane.rotateX(THREE.MathUtils.degToRad(270));

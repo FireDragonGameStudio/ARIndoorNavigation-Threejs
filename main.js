@@ -1,15 +1,20 @@
-import "./style.css";
+// template project/based on
+// https://github.com/mrdoob/three.js/blob/master/examples/webxr_ar_cones.html
 
+// sources for webxr image tracking
 // https://github.com/immersive-web/marker-tracking/blob/main/explainer.md
 // https://arimg.glitch.me/
 
 // how to get transparent occluder material
 // https://stackoverflow.com/questions/28869268/three-js-transparent-object-occlusion
 
+// deployment can be found under
+// https://firedragongamestudio.github.io/ARIndoorNavigation-Threejs/
+
+import "./style.css";
+
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-// import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-// import { VRButton } from "three/addons/webxr/VRButton.js";
 import { ARButton } from "three/addons/webxr/ARButton.js";
 import CasualFlapMapImageUrl from "./CasualFlatMap.png";
 
@@ -19,7 +24,6 @@ let occluderMaterial;
 let navigationArea;
 
 init();
-setupVR();
 setupGeometry();
 
 function init() {
@@ -33,6 +37,7 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.setAnimationLoop(render);
+    renderer.xr.enabled = true;
     document.body.appendChild(renderer.domElement);
 
     const ambient = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
@@ -42,16 +47,11 @@ function init() {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0, 0);
     controls.update();
-}
 
-function setupVR() {
     document.body.appendChild(ARButton.createButton(renderer));
-
-    renderer.xr.enabled = true;
 
     controller = renderer.xr.getController(0);
     controller.addEventListener("select", () => {
-        // set breadcrumb cubes (based on https://github.com/mrdoob/three.js/blob/master/examples/webxr_ar_cones.html)
         const tapGeometry = new THREE.BoxGeometry(0.06, 0.06, 0.06);
         const tapMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff * Math.random() });
         const tapMesh = new THREE.Mesh(tapGeometry, tapMaterial);
@@ -82,6 +82,7 @@ window.addEventListener("resize", () => {
 function setupGeometry() {
     // create occluder material
     occluderMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+    occluderMaterial.colorWrite = false;
 
     // create room map
     navigationArea = new THREE.Group();
@@ -116,7 +117,6 @@ function createWallElement(position, rotation, scale) {
     const occluderGeometry = new THREE.BoxGeometry(scale.x, scale.y, scale.z);
     const occluderMesh = new THREE.Mesh(occluderGeometry, occluderMaterial);
     occluderMesh.position.set(position.x, position.y, position.z);
-    occluderMesh.material.colorWrite = false;
     occluderMesh.renderOrder = 2;
 
     return occluderMesh;

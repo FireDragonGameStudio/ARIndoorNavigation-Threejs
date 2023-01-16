@@ -13,24 +13,27 @@
 
 import "./style.css";
 
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { ARButton } from "three/addons/webxr/ARButton.js";
+//import * as THREE from "three";
+//import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+//import { ARButton } from "three/addons/webxr/ARButton.js";
 import CasualFlapMapImageUrl from "./CasualFlatMap.png";
+import * as THREEx from "@ar-js-org/ar.js/three.js/build/ar-threex.js";
 
 let camera, scene, renderer, controls;
 let controller;
 let occluderMaterial;
 let navigationArea;
 
+let startPosition;
+let mesh;
+
 init();
 setupGeometry();
 
-function init() {
+async function init() {
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
-    camera.position.z = 5;
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -48,25 +51,97 @@ function init() {
     controls.target.set(0, 0, 0);
     controls.update();
 
-    document.body.appendChild(ARButton.createButton(renderer));
+    // setup the image target
+    const img = document.getElementById("img");
+    const imgBitmap = await createImageBitmap(img);
+    console.log(imgBitmap);
 
-    controller = renderer.xr.getController(0);
-    controller.addEventListener("select", () => {
-        const tapGeometry = new THREE.BoxGeometry(0.06, 0.06, 0.06);
-        const tapMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff * Math.random() });
-        const tapMesh = new THREE.Mesh(tapGeometry, tapMaterial);
-        tapMesh.position.set(0, 0, -0.3).applyMatrix4(controller.matrixWorld);
-        tapMesh.setRotationFromMatrix(controller.matrixWorld);
-        tapMesh.renderOrder = 3;
-        scene.add(tapMesh);
+    //more on image-tracking feature: https://github.com/immersive-web/marker-tracking/blob/main/explainer.md
+    // const button = ARButton.createButton(renderer, {
+    //     requiredFeatures: ["image-tracking"], // notice a new required feature
+    //     trackedImages: [
+    //         {
+    //             image: imgBitmap, // tell webxr this is the image target we want to track
+    //             widthInMeters: 0.7, // in meters what the size of the PRINTED image in the real world
+    //         },
+    //     ],
+    //     //this is for the mobile debug
+    //     optionalFeatures: ["dom-overlay", "dom-overlay-for-handheld-ar"],
+    //     domOverlay: {
+    //         root: document.body,
+    //     },
+    // });
+    const button = ARButton.createButton();
+    document.body.appendChild(button);
+
+    // start AR session
+    renderer.xr.addEventListener("sessionstart", function (event) {
+        // add tap on screen for placing cubes
+        controller = renderer.xr.getController(0);
+        controller.addEventListener("select", () => {
+            const tapGeometry = new THREE.BoxGeometry(0.06, 0.06, 0.06);
+            const tapMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff * Math.random() });
+            const tapMesh = new THREE.Mesh(tapGeometry, tapMaterial);
+            tapMesh.position.set(0, 0, -0.3).applyMatrix4(controller.matrixWorld);
+            tapMesh.setRotationFromMatrix(controller.matrixWorld);
+            tapMesh.renderOrder = 3;
+            scene.add(tapMesh);
+        });
+        scene.add(controller);
     });
-    scene.add(controller);
+
+    startPosition = new THREE.Vector3(-2.8, -0.1, 2);
+
+    // add object for our image
+    var geometry = new THREE.BoxGeometry(1, 1, 1);
+    geometry.translate(0, 0.5, 0);
+    var material = new THREE.MeshNormalMaterial({
+        transparent: true,
+        opacity: 0.5,
+        side: THREE.DoubleSide,
+    });
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.name = "MarkerCube";
+    mesh.matrixAutoUpdate = false;
+    mesh.visible = false;
+    scene.add(mesh);
 
     // check for supported features
     // navigator.xr.isSessionSupported()
 }
 
-function render(time) {
+function render(timestamp, frame) {
+    // if (frame) {
+    //     const results = frame.getImageTrackingResults(); //checking if there are any images we track
+
+    //     //if we have more than one image the results are an array
+    //     for (const result of results) {
+    //         // The result's index is the image's position in the trackedImages array specified at session creation
+    //         const imageIndex = result.index;
+
+    //         // Get the pose of the image relative to a reference space.
+    //         const referenceSpace = renderer.xr.getReferenceSpace();
+    //         const pose = frame.getPose(result.imageSpace, referenceSpace);
+
+    //         //checking the state of the tracking
+    //         const state = result.trackingState;
+    //         console.log(state);
+
+    //         if (state == "tracked") {
+    //             mesh.visible = true;
+    //             // update the cone mesh when the image target is found
+    //             mesh.matrix.fromArray(pose.transform.matrix);
+    //             console.log("Image target has been found", mesh.position);
+
+    //             // set starting point to start-room center
+    //             // navigationArea.position.set(-2.8, -0.1, 2);
+    //         } else if (state == "emulated") {
+    //             mesh.visible = false;
+    //             // console.log("Image target no longer seen");
+    //         }
+    //     }
+    // }
+
     // required if controls.enableDamping or controls.autoRotate are set to true
     controls.update();
 
@@ -96,9 +171,6 @@ function setupGeometry() {
     navigationArea.add(createWallElement(new THREE.Vector3(4.86, -1, -0.01), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.06, 3, 9.114)));
     navigationArea.add(createWallElement(new THREE.Vector3(-1.6, -1, -0.88), new THREE.Vector3(0, 0, 0), new THREE.Vector3(2.85, 3, 0.06)));
     navigationArea.add(createWallElement(new THREE.Vector3(2.9, -1, 4.06), new THREE.Vector3(0, 0, 0), new THREE.Vector3(4, 3, 0.06)));
-
-    // set starting point to start-room center
-    navigationArea.position.set(-2.8, -0.1, 2);
 
     // create floor
     const floorGeometry = new THREE.PlaneGeometry(10.2, 8.5);

@@ -1,14 +1,15 @@
 # AR Indoor Navigation with three.js
 
-This is the corresponding github repository for the short tutorial series about "How to create an indoor navigation app with ARFoundation WITHOUT the usage of Cloud Anchors or using ARPointCloud Data.". Make sure to have the marker images available to test the tracking. The links for the used images can be found in the index.html.
+This is the corresponding github repository for the short tutorial series about "How to create an indoor navigation app with ARFoundation WITHOUT the usage of Cloud Anchors or using ARPointCloud Data.". Make sure to have the marker images available to test the tracking. The links for the used images can be found in the index.html. To test with the example from the videos, you can visit https://firedragongamestudio.github.io/ARIndoorNavigation-Threejs
 
 The sample is based on the default three.js WebXR samples (https://threejs.org/examples/#webxr_ar_cones), with a few adjustments. The adjusted script parts can be found within main.js. The bundler used is Vite (https://vitejs.dev/).
 
 PLS NOTE THAT THIS PROJECT ONLY WORKS TO 100% ON CHROME FOR ANDROID!!!
 
 Tutorial Videos:
-- Part 1 - https://www.youtube.com/watch?v=Ww349vBXf-4
-- Part 2 - 
+
+-   Part 1 - https://www.youtube.com/watch?v=Ww349vBXf-4
+-   Part 2 -
 
 ## WebXR Image Tracking
 

@@ -97,6 +97,9 @@ async function init() {
         // reset camera to zero
         camera.position.set(0, 0, 0);
 
+        // make navigation geometry invisible
+        navigationAreaParent.visible = false;
+
         // add tap on screen for placing cubes
         controller = renderer.xr.getController(0);
         controller.addEventListener("select", () => {
@@ -242,7 +245,6 @@ function setupGeometry() {
     // navigation area parent for easier placement
     navigationAreaParent = new THREE.Group();
     navigationAreaParent.add(navigationArea);
-    navigationAreaParent.visible = false;
 
     scene.add(navigationAreaParent);
 }

@@ -109,7 +109,7 @@ async function init() {
             tapMesh.position.set(0, 0, -0.3).applyMatrix4(controller.matrixWorld);
             tapMesh.setRotationFromMatrix(controller.matrixWorld);
             tapMesh.renderOrder = 3;
-            scene.add(tapMesh);
+            navigationArea.attach(tapMesh);
         });
         scene.add(controller);
     });
@@ -182,7 +182,7 @@ function render(timestamp, frame) {
                     earthNFTMesh.visible = true;
                     // update the target mesh when the earth image target is found
                     earthNFTMesh.matrix.fromArray(pose.transform.matrix);
-                    console.log("Kanji Image target has been found", earthNFTMesh.position);
+                    console.log("EarthNFT Image target has been found", earthNFTMesh.position);
 
                     earthNFTMesh.getWorldPosition(markerWorldPosition);
                     earthNFTMesh.getWorldQuaternion(markerWorldQuaternion);

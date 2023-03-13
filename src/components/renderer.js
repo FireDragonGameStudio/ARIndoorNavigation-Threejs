@@ -5,7 +5,6 @@ function createRenderer() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputEncoding = sRGBEncoding;
-    //   renderer.setAnimationLoop(render);
     renderer.xr.enabled = true;
 
     return renderer;
@@ -35,4 +34,14 @@ function setupARSession(renderer, camera, scene, navigationAreaParent) {
     });
 }
 
-export { createRenderer, setupARSession };
+function setupARJS(imageTrackingARJS, camera, scene, renderer, navigationAreaParent) {
+    // start AR session
+    renderer.xr.addEventListener("sessionstart", (event) => {
+        // init AR.js
+        imageTrackingARJS.init(camera, scene, renderer, navigationAreaParent, navigationAreaParent.children[0]);
+    });
+    // disable spinner
+    document.querySelector(".arjs-loader-spinner").style.display = "none";
+}
+
+export { createRenderer, setupARSession, setupARJS };

@@ -1,8 +1,8 @@
 import { createCamera } from "./components/camera.js";
 import { createControls } from "./components/controls.js";
-import { createImageTrackingWebXR } from "./components/imageTracking.js";
+import { createImageTrackingWebXR, createImageTrackingARJS } from "./components/imageTracking.js";
 import { createLights } from "./components/lights.js";
-import { createRenderer, setupARSession } from "./components/renderer.js";
+import { createRenderer, setupARSession, setupARJS } from "./components/renderer.js";
 import { createScene } from "./components/scene.js";
 
 import { setupNavigationAreaGeometry } from "./components/navigation/navigationArea.js";
@@ -39,11 +39,17 @@ class IndoorNav {
         const navigationAreaParent = setupNavigationAreaGeometry();
         scene.add(navigationAreaParent);
 
-        // setup image tracking
-        const imageTrackingWebXR = createImageTrackingWebXR(renderer, navigationAreaParent);
-        await imageTrackingWebXR.setup(scene);
+        // setup image tracking WebXR
+        // const imageTrackingWebXR = createImageTrackingWebXR(renderer, navigationAreaParent);
+        // await imageTrackingWebXR.setup(scene);
+        // setupARSession(renderer, camera, scene, navigationAreaParent);
+        // loop.updatables.push(imageTrackingWebXR);
+
+        // setup image tracking AR.js
+        const imageTrackingARJS = createImageTrackingARJS(renderer);
         setupARSession(renderer, camera, scene, navigationAreaParent);
-        loop.updatables.push(imageTrackingWebXR);
+        setupARJS(imageTrackingARJS, camera, scene, renderer, navigationAreaParent);
+        loop.updatables.push(imageTrackingARJS);
     }
 
     render() {

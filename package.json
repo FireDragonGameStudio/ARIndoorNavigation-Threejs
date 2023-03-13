@@ -13,6 +13,7 @@
     "vite": "^3.2.3"
   },
   "dependencies": {
+    "@ar-js-org/ar.js": "^3.4.4",
     "three": "^0.148.0"
   }
 }

@@ -7,7 +7,7 @@ let hiroMarkerMesh, earthNFTMesh;
 class ImageTrackingWebXR {
     constructor() {}
 
-    async setup(scene, renderer, navigationAreaParent) {
+    async setup(scene, renderer) {
         // setup the image targets
         const imgMarkerHiro = document.getElementById("imgMarkerHiro");
         const imgMarkerHiroBitmap = await createImageBitmap(imgMarkerHiro);
@@ -65,11 +65,9 @@ class ImageTrackingWebXR {
             },
         });
         document.body.appendChild(button);
-
-        renderer, navigationAreaParent;
     }
 
-    updateImageTrackingWebXR(timestamp, frame, renderer, navigationAreaParent) {
+    updateImageTrackingWebXR(timestamp, frame, renderer, navigationAreaParent, navigationArea) {
         if (frame) {
             console.log("Frame: ", frame);
             const results = frame.getImageTrackingResults(); //checking if there are any images we track

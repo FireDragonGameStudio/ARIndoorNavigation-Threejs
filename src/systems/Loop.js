@@ -1,6 +1,6 @@
-import { Clock } from "three";
+//import { Clock } from "three";
 
-const clock = new Clock();
+//const clock = new Clock();
 
 class Loop {
     constructor(camera, scene, renderer) {
@@ -24,16 +24,17 @@ class Loop {
         this.renderer.setAnimationLoop(null);
     }
 
-    tick() {
+    tick(timestamp, frame) {
         // only call the getDelta function once per frame!
-        const delta = clock.getDelta();
+        //const delta = clock.getDelta();
 
         // console.log(
         //   `The last frame rendered in ${delta * 1000} milliseconds`,
         // );
 
         for (const object of this.updatables) {
-            object.tick(delta);
+            //object.tick(delta);
+            object.tick(timestamp, frame);
         }
     }
 }

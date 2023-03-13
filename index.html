@@ -5,10 +5,16 @@
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>AR Indoor Navigation - WebXR</title>
+        <link href="/style.css" rel="stylesheet" type="text/css" />
+
+        <script type="module" src="/main.js"></script>
     </head>
     <body>
+        <!-- images for webxr image tracking; still in draft so it may change in future -->
         <img id="imgMarkerHiro" src="https://raw.githubusercontent.com/stemkoski/AR.js-examples/master/markers/hiro.png" alt="hiro" style="display: none" />
         <img id="imgNFTEarth" src="https://raw.githubusercontent.com/stemkoski/AR.js-examples/master/images/earth-flat.jpg" alt="earth" style="display: none" />
-        <script type="module" src="/main.js"></script>
+        <div id="scene-container">
+            <!-- Our <canvas> will be inserted here -->
+        </div>
     </body>
 </html>

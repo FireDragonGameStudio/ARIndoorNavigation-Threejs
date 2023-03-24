@@ -9,9 +9,8 @@ function createImageTrackingWebXR(renderer, navigationAreaParent) {
 }
 
 function createImageTrackingARJS(renderer) {
-    const imageTrackingARJS = new ImageTrackingARJS(renderer);
+    const imageTrackingARJS = new ImageTrackingARJS();
     imageTrackingARJS.tick = (timestamp, frame) => imageTrackingARJS.updateImageTrackingARJS();
-
     return imageTrackingARJS;
 }
 

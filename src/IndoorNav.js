@@ -40,16 +40,16 @@ class IndoorNav {
         scene.add(navigationAreaParent);
 
         // setup image tracking WebXR
-        // const imageTrackingWebXR = createImageTrackingWebXR(renderer, navigationAreaParent);
-        // await imageTrackingWebXR.setup(scene);
-        // setupARSession(renderer, camera, scene, navigationAreaParent);
-        // loop.updatables.push(imageTrackingWebXR);
+        const imageTrackingWebXR = createImageTrackingWebXR(renderer, navigationAreaParent);
+        await imageTrackingWebXR.setup(scene);
+        setupARSession(renderer, camera, scene, navigationAreaParent);
+        loop.updatables.push(imageTrackingWebXR);
 
         // setup image tracking AR.js
-        const imageTrackingARJS = createImageTrackingARJS(renderer);
-        setupARSession(renderer, camera, scene, navigationAreaParent);
-        setupARJS(imageTrackingARJS, camera, scene, renderer, navigationAreaParent);
-        loop.updatables.push(imageTrackingARJS);
+        // const imageTrackingARJS = createImageTrackingARJS(renderer);
+        // setupARSession(renderer, camera, scene, navigationAreaParent);
+        // setupARJS(imageTrackingARJS, camera, scene, renderer, navigationAreaParent);
+        // loop.updatables.push(imageTrackingARJS);
     }
 
     render() {

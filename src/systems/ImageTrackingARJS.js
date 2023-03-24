@@ -5,27 +5,19 @@ import { ArToolkitSource, ArToolkitContext, ArMarkerControls } from "@ar-js-org/
 let arToolkitSource, arToolkitContext, arHiroMarkerControls, arKanjiMarkerControls;
 
 class ImageTrackingARJS {
-    constructor(renderer) {
-        const button = ARButton.createButton(renderer, {
-            //this is for the mobile debug
-            optionalFeatures: ["dom-overlay", "dom-overlay-for-handheld-ar"],
-            domOverlay: {
-                root: document.body,
-            },
-        });
-        document.body.appendChild(button);
-    }
+    constructor() {}
 
     init(camera, scene, renderer, navigationAreaParent, navigationArea) {
         // show spinner
         document.querySelector(".arjs-loader-spinner").style.display = "";
 
+        // SOURCE
         arToolkitSource = new ArToolkitSource({
             // to read from the webcam
             sourceType: "webcam",
 
-            sourceWidth: window.innerWidth > window.innerHeight ? 640 : 480,
-            sourceHeight: window.innerWidth > window.innerHeight ? 480 : 640,
+            // sourceWidth: window.innerWidth > window.innerHeight ? 640 : 480,
+            // sourceHeight: window.innerWidth > window.innerHeight ? 480 : 640,
 
             // to read from an image
             // sourceType : 'image',
@@ -38,21 +30,10 @@ class ImageTrackingARJS {
 
         arToolkitSource.init(() => {
             arToolkitSource.domElement.addEventListener("canplay", () => {
-                this.initARContext(camera, scene, navigationAreaParent, navigationArea);
                 this.onResize(renderer);
             });
         });
 
-        window.addEventListener("arjs-nft-loaded", (ev) => {
-            console.log(ev);
-        });
-
-        window.addEventListener("resize", () => {
-            onResize(renderer);
-        });
-    }
-
-    initARContext(camera, scene, navigationAreaParent, navigationArea) {
         // CONTEXT
         arToolkitContext = new ArToolkitContext({
             cameraParametersUrl: ArToolkitContext.baseURL + "../data/data/camera_para.dat",
@@ -64,6 +45,9 @@ class ImageTrackingARJS {
 
             arToolkitContext.arController.orientation = this.getSourceOrientation();
             arToolkitContext.arController.options.orientation = this.getSourceOrientation();
+
+            // disable spinner after start
+            document.querySelector(".arjs-loader-spinner").style.display = "none";
         });
 
         // HIRO MARKER
@@ -71,8 +55,13 @@ class ImageTrackingARJS {
         // KANJI MARKER
         this.setupKanjiMarker(scene, navigationAreaParent, navigationArea);
 
-        // disable spinner after start
-        document.querySelector(".arjs-loader-spinner").style.display = "none";
+        window.addEventListener("arjs-nft-loaded", (ev) => {
+            console.log(ev);
+        });
+
+        window.addEventListener("resize", () => {
+            this.onResize(renderer);
+        });
     }
 
     setupHiroMarker(scene, navigationAreaParent, navigationArea) {
@@ -88,6 +77,8 @@ class ImageTrackingARJS {
         markerGroup.add(mesh);
         markerGroup.name = "hiroMarker";
         scene.add(markerGroup);
+
+        console.log("ArToolkitContext", arToolkitContext);
 
         arHiroMarkerControls = new ArMarkerControls(arToolkitContext, markerGroup, {
             // type of marker - ['pattern', 'barcode', 'unknown' ]
@@ -105,6 +96,7 @@ class ImageTrackingARJS {
         });
 
         arHiroMarkerControls.addEventListener("markerFound", () => {
+            console.log("HIRO MARKER FOUND!");
             navigationAreaParent.visible = true;
 
             // Vector3 for marker world position
@@ -178,11 +170,9 @@ class ImageTrackingARJS {
     }
 
     updateImageTrackingARJS() {
-        if (!arToolkitContext || !arToolkitSource || !arToolkitSource.ready) {
-            return;
+        if (arToolkitSource && arToolkitSource.ready) {
+            arToolkitContext.update(arToolkitSource.domElement);
         }
-
-        arToolkitContext.update(arToolkitSource.domElement);
     }
 
     getSourceOrientation() {
@@ -200,7 +190,7 @@ class ImageTrackingARJS {
     onResize(renderer) {
         arToolkitSource.onResizeElement();
         arToolkitSource.copyElementSizeTo(renderer.domElement);
-        if (arToolkitContext.arController !== null && arToolkitContext.arController.canvas != null) {
+        if (arToolkitContext.arController !== null) {
             arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
         }
     }

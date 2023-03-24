@@ -2,19 +2,6 @@ body {
     /* remove margins and scroll bars */
     margin: 0;
     overflow: hidden;
-
-    /* style text */
-    text-align: center;
-    font-size: 12px;
-    font-family: Sans-Serif;
-
-    /* color text */
-    background-color: #000;
-    color: #444;
-
-    font-family: Monospace;
-    font-size: 13px;
-    line-height: 24px;
 }
 
 #scene-container {
@@ -22,15 +9,9 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-
-    /*
-      Set the container's background color to the same as the scene's
-      background to prevent flashing on load
-    */
-    background-color: skyblue;
 }
 
-.arjs-loader {
+/* .arjs-loader {
     margin: 0 auto;
     width: 100%;
     height: 100%;
@@ -67,4 +48,4 @@ body {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
-}
+} */

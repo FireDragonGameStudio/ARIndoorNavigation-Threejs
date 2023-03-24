@@ -1,5 +1,5 @@
 import { MeshStandardMaterial, Vector3, PlaneGeometry, TextureLoader, MeshBasicMaterial, Mesh, MathUtils, Group, BoxGeometry } from "three";
-import CasualFlapMapImageUrl from "/textures/CasualFlatMap.png";
+import CasualFlapMapImageUrl from "/CasualFlatMap.png";
 
 function setupNavigationAreaGeometry() {
     // create occluder material

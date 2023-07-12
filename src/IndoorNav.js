@@ -41,7 +41,7 @@ class IndoorNav {
 
         // setup image tracking WebXR
         const imageTrackingWebXR = createImageTrackingWebXR(renderer, navigationAreaParent);
-        await imageTrackingWebXR.setup(scene);
+        await imageTrackingWebXR.setup(scene, renderer);
         setupARSession(renderer, camera, scene, navigationAreaParent);
         loop.updatables.push(imageTrackingWebXR);
 

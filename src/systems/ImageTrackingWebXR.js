@@ -1,11 +1,17 @@
-import { BoxGeometry, MeshNormalMaterial, DoubleSide, SphereGeometry, Mesh } from "three";
+import { Vector3, Quaternion, Euler, BoxGeometry, MeshNormalMaterial, DoubleSide, SphereGeometry, Mesh } from "three";
 import { ARButton } from "three/addons/webxr/ARButton.js";
 
 let markerWorldPosition, markerWorldQuaternion, markerWorldRotation;
 let hiroMarkerMesh, earthNFTMesh;
 
 class ImageTrackingWebXR {
-    constructor() {}
+    constructor() {
+        // Vector3 for marker world position
+        markerWorldPosition = new Vector3();
+        // Quaternion & Vector3 for marker world rotation
+        markerWorldQuaternion = new Quaternion();
+        markerWorldRotation = new Euler();
+    }
 
     async setup(scene, renderer) {
         // setup the image targets
@@ -69,7 +75,6 @@ class ImageTrackingWebXR {
 
     updateImageTrackingWebXR(timestamp, frame, renderer, navigationAreaParent, navigationArea) {
         if (frame) {
-            console.log("Frame: ", frame);
             const results = frame.getImageTrackingResults(); //checking if there are any images we track
 
             //if we have more than one image the results are an array

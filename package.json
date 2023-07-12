@@ -10,10 +10,11 @@
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.0.1",
-    "vite": "^4.2.1"
+    "vite": "^4.4.3"
   },
   "dependencies": {
-    "@ar-js-org/ar.js": "^3.4.4",
-    "three": "^0.148.0"
+    "@ar-js-org/ar.js": "^3.4.5",
+    "three": "^0.154.0",
+    "three-pathfinding": "^1.2.0"
   }
 }

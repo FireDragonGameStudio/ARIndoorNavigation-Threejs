@@ -1,17 +1,16 @@
 import { Vector3, Quaternion, Euler, BoxGeometry, MeshNormalMaterial, DoubleSide, SphereGeometry, Mesh } from "three";
 import { ARButton } from "three/addons/webxr/ARButton.js";
 
-let markerWorldPosition, markerWorldQuaternion, markerWorldRotation;
+// Vector3 for marker world position
+let markerWorldPosition = new Vector3();
+// Quaternion & Vector3 for marker world rotation
+let markerWorldQuaternion = new Quaternion();
+let markerWorldRotation = new Euler();
+
 let hiroMarkerMesh, earthNFTMesh;
 
 class ImageTrackingWebXR {
-    constructor() {
-        // Vector3 for marker world position
-        markerWorldPosition = new Vector3();
-        // Quaternion & Vector3 for marker world rotation
-        markerWorldQuaternion = new Quaternion();
-        markerWorldRotation = new Euler();
-    }
+    constructor() {}
 
     async setup(scene, renderer) {
         // setup the image targets

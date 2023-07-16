@@ -132,6 +132,14 @@ class ImageTrackingWebXR {
             }
         }
     }
+
+    getMarkerWorldPosition() {
+        return markerWorldPosition;
+    }
+
+    getMarkerWorldRotation() {
+        return markerWorldRotation;
+    }
 }
 
 export { ImageTrackingWebXR };

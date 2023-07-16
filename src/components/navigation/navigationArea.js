@@ -1,9 +1,5 @@
-import { MeshStandardMaterial, Vector3, PlaneGeometry, TextureLoader, MeshBasicMaterial, Mesh, MathUtils, Group, BoxGeometry, BufferGeometry, LineBasicMaterial, Line } from "three";
+import { MeshStandardMaterial, Vector3, PlaneGeometry, TextureLoader, MeshBasicMaterial, Mesh, MathUtils, Group, BoxGeometry } from "three";
 import CasualFlapMapImageUrl from "/CasualFlatMap.png";
-
-import { Pathfinding } from "three-pathfinding";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import NavMeshUrl from "/navmesh.gltf";
 
 function setupNavigationAreaGeometry() {
     // create occluder material
@@ -30,6 +26,7 @@ function setupNavigationAreaGeometry() {
     const floorPlaneMesh = new Mesh(floorGeometry, floorMaterial);
     floorPlaneMesh.rotateX(MathUtils.degToRad(270));
     floorPlaneMesh.renderOrder = 3;
+    floorPlaneMesh.visible = false;
     navigationArea.add(floorPlaneMesh);
 
     // navigation area parent for easier placement
@@ -37,80 +34,80 @@ function setupNavigationAreaGeometry() {
     navigationAreaParent.add(navigationArea);
 
     // setup navmesh and navigation targets
-    const loader = new GLTFLoader();
-    loader.load(
-        NavMeshUrl,
-        (gltf) => {
-            // NavMesh generator https://navmesh.isaacmason.com/
-            // PathFinding https://github.com/donmccurdy/three-pathfinding
+    // const loader = new GLTFLoader();
+    // loader.load(
+    //     NavMeshUrl,
+    //     (gltf) => {
+    //         // NavMesh generator https://navmesh.isaacmason.com/
+    //         // PathFinding https://github.com/donmccurdy/three-pathfinding
 
-            let navigationMeshParent = new Group();
-            let navMesh = gltf.scene;
-            navigationMeshParent.add(navMesh);
+    //         let navigationMeshParent = new Group();
+    //         let navMesh = gltf.scene;
+    //         navigationMeshParent.add(navMesh);
 
-            let navMeshGeometry = new BufferGeometry();
-            navMesh.children.forEach((child) => {
-                if (child.type === "Mesh") {
-                    console.log("Mesh", child);
-                    navMeshGeometry = child;
-                }
-            });
-            navMeshGeometry.visible = false;
+    //         let navMeshGeometry = new BufferGeometry();
+    //         navMesh.children.forEach((child) => {
+    //             if (child.type === "Mesh") {
+    //                 console.log("Mesh", child);
+    //                 navMeshGeometry = child;
+    //             }
+    //         });
+    //         navMeshGeometry.visible = false;
 
-            const startPoint = new Vector3(3, 0.5, -2);
-            const endPoint = new Vector3(0, 0.5, -2);
+    //         const startPoint = new Vector3(3, 0.5, -2);
+    //         const endPoint = new Vector3(0, 0.5, -2);
 
-            const geometry = new BoxGeometry(1, 1, 1);
-            const material = new MeshBasicMaterial({ color: 0x00ff00 });
-            const cube = new Mesh(geometry, material);
-            cube.position.set(startPoint.x, startPoint.y, startPoint.z);
-            cube.renderOrder = 3;
+    //         const geometry = new BoxGeometry(1, 1, 1);
+    //         const material = new MeshBasicMaterial({ color: 0x00ff00 });
+    //         const cube = new Mesh(geometry, material);
+    //         cube.position.set(startPoint.x, startPoint.y, startPoint.z);
+    //         cube.renderOrder = 3;
 
-            const secgeometry = new BoxGeometry(1, 1, 1);
-            const secmaterial = new MeshBasicMaterial({ color: 0x0000ff });
-            const seccube = new Mesh(secgeometry, secmaterial);
-            seccube.position.set(endPoint.x, endPoint.y, endPoint.z);
-            seccube.renderOrder = 3;
+    //         const secgeometry = new BoxGeometry(1, 1, 1);
+    //         const secmaterial = new MeshBasicMaterial({ color: 0x0000ff });
+    //         const seccube = new Mesh(secgeometry, secmaterial);
+    //         seccube.position.set(endPoint.x, endPoint.y, endPoint.z);
+    //         seccube.renderOrder = 3;
 
-            navigationMeshParent.add(cube);
-            navigationMeshParent.add(seccube);
+    //         navigationMeshParent.add(cube);
+    //         navigationMeshParent.add(seccube);
 
-            const pathfinding = new Pathfinding();
-            const ZONE = "level1";
-            const zoneData = Pathfinding.createZone(navMeshGeometry.geometry);
-            pathfinding.setZoneData(ZONE, zoneData);
+    //         const pathfinding = new Pathfinding();
+    //         const ZONE = "level1";
+    //         const zoneData = Pathfinding.createZone(navMeshGeometry.geometry);
+    //         pathfinding.setZoneData(ZONE, zoneData);
 
-            const groupID = pathfinding.getGroup(ZONE, startPoint);
+    //         const groupID = pathfinding.getGroup(ZONE, startPoint);
 
-            const startnode = pathfinding.getClosestNode(startPoint, ZONE, groupID);
-            const endnode = pathfinding.getClosestNode(endPoint, ZONE, groupID);
+    //         const startnode = pathfinding.getClosestNode(startPoint, ZONE, groupID);
+    //         const endnode = pathfinding.getClosestNode(endPoint, ZONE, groupID);
 
-            const path = pathfinding.findPath(startPoint, endPoint, ZONE, groupID);
-            console.log("GroupID, Path, StartPoint, EndPoint", groupID, path, startnode, endnode);
+    //         const path = pathfinding.findPath(startPoint, endPoint, ZONE, groupID);
+    //         console.log("GroupID, Path, StartPoint, EndPoint", groupID, path, startnode, endnode);
 
-            console.log("Zone", zoneData);
+    //         console.log("Zone", zoneData);
 
-            if (path != null) {
-                const points = [];
-                points.push(startPoint);
-                for (let index = 0; index < path.length; index++) {
-                    points.push(path[index]);
-                }
+    //         if (path != null) {
+    //             const points = [];
+    //             points.push(startPoint);
+    //             for (let index = 0; index < path.length; index++) {
+    //                 points.push(path[index]);
+    //             }
 
-                const lineMaterial = new LineBasicMaterial({ color: 0x0000ff });
-                const lineGeometry = new BufferGeometry().setFromPoints(points);
-                const line = new Line(lineGeometry, lineMaterial);
-                line.renderOrder = 3;
-                navigationMeshParent.add(line);
-            }
+    //             const lineMaterial = new LineBasicMaterial({ color: 0x0000ff });
+    //             const lineGeometry = new BufferGeometry().setFromPoints(points);
+    //             const line = new Line(lineGeometry, lineMaterial);
+    //             line.renderOrder = 3;
+    //             navigationMeshParent.add(line);
+    //         }
 
-            navigationAreaParent.add(navigationMeshParent);
-        },
-        undefined,
-        (e) => {
-            console.error(e);
-        }
-    );
+    //         navigationAreaParent.add(navigationMeshParent);
+    //     },
+    //     undefined,
+    //     (e) => {
+    //         console.error(e);
+    //     }
+    // );
 
     return navigationAreaParent;
 }

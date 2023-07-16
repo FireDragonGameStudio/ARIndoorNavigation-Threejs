@@ -9,7 +9,7 @@ PLS NOTE THAT THIS PROJECT ONLY WORKS TO 100% ON CHROME FOR ANDROID!!!
 Tutorial Videos:
 
 -   Part 1 - https://www.youtube.com/watch?v=Ww349vBXf-4
--   Part 2 -
+-   Part 2 - https://www.youtube.com/watch?v=riiJdNq2LWI
 
 ## WebXR Image Tracking
 

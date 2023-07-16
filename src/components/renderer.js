@@ -1,4 +1,4 @@
-import { WebGLRenderer, sRGBEncoding, BoxGeometry, MeshPhongMaterial, Mesh } from "three";
+import { WebGLRenderer, BoxGeometry, MeshPhongMaterial, Mesh } from "three";
 
 function createRenderer() {
     const renderer = new WebGLRenderer({ antialias: true, alpha: true });

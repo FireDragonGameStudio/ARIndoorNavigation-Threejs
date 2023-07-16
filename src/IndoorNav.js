@@ -6,6 +6,7 @@ import { createRenderer, setupARSession, setupARJS } from "./components/renderer
 import { createScene } from "./components/scene.js";
 
 import { setupNavigationAreaGeometry } from "./components/navigation/navigationArea.js";
+import { createPathFindingWebXR } from "./components/navigation/pathfinding.js";
 
 import { Resizer } from "./systems/Resizer.js";
 import { Loop } from "./systems/Loop.js";
@@ -44,8 +45,11 @@ class IndoorNav {
         await imageTrackingWebXR.setup(scene, renderer);
         setupARSession(renderer, camera, scene, navigationAreaParent);
         loop.updatables.push(imageTrackingWebXR);
-        //
-        //
+
+        // setup pathfinding
+        let pathFindingWebXR = createPathFindingWebXR(camera, imageTrackingWebXR, navigationAreaParent);
+        loop.updatables.push(pathFindingWebXR);
+
         // setup image tracking AR.js
         // const imageTrackingARJS = createImageTrackingARJS(renderer);
         // setupARSession(renderer, camera, scene, navigationAreaParent);

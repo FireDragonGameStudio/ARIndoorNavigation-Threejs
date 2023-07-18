@@ -20,17 +20,18 @@ function setupARSession(renderer, camera, scene, navigationAreaParent) {
         navigationAreaParent.visible = false;
 
         // add tap on screen for placing cubes
-        const controller = renderer.xr.getController(0);
-        controller.addEventListener("select", () => {
-            const tapGeometry = new BoxGeometry(0.06, 0.06, 0.06);
-            const tapMaterial = new MeshPhongMaterial({ color: 0xffffff * Math.random() });
-            const tapMesh = new Mesh(tapGeometry, tapMaterial);
-            tapMesh.position.set(0, 0, -0.3).applyMatrix4(controller.matrixWorld);
-            tapMesh.setRotationFromMatrix(controller.matrixWorld);
-            tapMesh.renderOrder = 3;
-            navigationAreaParent.children[0].attach(tapMesh);
-        });
-        scene.add(controller);
+        // ONLY FOR DEBUGGING
+        // const controller = renderer.xr.getController(0);
+        // controller.addEventListener("select", () => {
+        //     const tapGeometry = new BoxGeometry(0.06, 0.06, 0.06);
+        //     const tapMaterial = new MeshPhongMaterial({ color: 0xffffff * Math.random() });
+        //     const tapMesh = new Mesh(tapGeometry, tapMaterial);
+        //     tapMesh.position.set(0, 0, -0.3).applyMatrix4(controller.matrixWorld);
+        //     tapMesh.setRotationFromMatrix(controller.matrixWorld);
+        //     tapMesh.renderOrder = 3;
+        //     navigationAreaParent.children[0].attach(tapMesh);
+        // });
+        // scene.add(controller);
     });
 }
 

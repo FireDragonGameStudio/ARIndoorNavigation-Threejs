@@ -11,6 +11,32 @@ body {
     height: 100%;
 }
 
+#wrapper {
+    text-align: center;
+    display: inline-block;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    z-index: 999;
+}
+
+#kitchenTarget,
+#livingRoomTarget {
+    padding: 12px 6px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    color: rgb(255, 255, 255);
+    font: 13px sans-serif;
+    text-align: center;
+    opacity: 0.5;
+    outline: none;
+    cursor: pointer;
+    left: calc(50% - 50px);
+    width: 100px;
+    z-index: 999;
+}
+
 /* .arjs-loader {
     margin: 0 auto;
     width: 100%;

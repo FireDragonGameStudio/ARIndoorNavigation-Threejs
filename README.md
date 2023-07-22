@@ -10,10 +10,19 @@ Tutorial Videos:
 
 -   Part 1 - https://www.youtube.com/watch?v=Ww349vBXf-4
 -   Part 2 - https://www.youtube.com/watch?v=riiJdNq2LWI
+-   Part 3 - https://www.youtube.com/watch?v=jQ0bXDZJ0pE
 
 ## WebXR Image Tracking
 
 This project uses the currently as DRAFT availible WebXR Image Tracking (https://github.com/immersive-web/marker-tracking/blob/main/explainer.md). There may be changes, so pls consider you're using smth that's not finished atm. It is planned to integrated AR.js (https://ar-js-org.github.io/AR.js-Docs/) to replace WebXR Image Tracking soon.
+
+## Three.js pathfinding
+
+The popular three-pathfinding package from Don McCurdy is used for the calculation from the camera position to the selected targets on the navmesh. https://github.com/donmccurdy/three-pathfinding
+
+## NavMesh generation
+
+After creating a simple plane mesh in Blender, the NavMesh was generated and downloaded here - https://navmesh.isaacmason.com/
 
 ## How to install?
 
